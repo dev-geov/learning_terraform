@@ -36,12 +36,14 @@ resource "aws_security_group" "prod_web" {
     }
 
     tags = {
-      "Terraform": "true"
+        "Terraform": "true"
     }
 }
 
 resource "aws_instance" "prod_web" {
-    ami = "ami-065fb54436c0e2d57"
+    count         = 2
+
+    ami           = "ami-065fb54436c0e2d57"
     instance_type = "t3.nano"
     
     vpc_security_group_ids = [
@@ -49,14 +51,19 @@ resource "aws_instance" "prod_web" {
     ]
 
     tags = {
-      "Terraform": "true"
+        "Terraform": "true"
     }
+}
+
+resource "aws_eip_association" "prod_web" {
+    instance_id   = aws_instance.prod_web.0.id
+    allocation_id = aws_eip.prod_web.id
 }
 
 resource "aws_eip" "prod_web" {
     instance = aws_instance.prod_web.id
-    
+
     tags = {
-      "Terraform": "true"
+        "Terraform": "true"
     }
 }
