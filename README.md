@@ -1,0 +1,1 @@
+### This is a simple project to provide an aws EC2 instance using Terraform and running Bitnami ###
